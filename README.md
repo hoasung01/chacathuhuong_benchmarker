@@ -1,35 +1,185 @@
 # ChacathuhuongBenchmarker
 
-TODO: Delete this and the text below, and describe your gem
-
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/chacathuhuong_benchmarker`. To experiment with that code, run `bin/console` for an interactive prompt.
+A focused benchmarking toolkit for Ruby on Rails applications that provides insights into:
+- Load Testing
+- Memory Usage Analysis
+- Query Performance Optimization
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+```ruby
+# Add to your Gemfile
+gem 'chacathuhuong_benchmarker'
+```
 
-Install the gem and add to the application's Gemfile by executing:
+```bash
+# Install via terminal
+bundle install
+rails generate chacathuhuong_benchmarker:install
+```
 
-    $ bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+## Core Features
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+### 1. Load Benchmarker
+```ruby
+# Simple load test
+load_test = ChacathuhuongBenchmarker::LoadBenchmarker.new(
+  concurrent_users: 10,
+  duration: 60
+)
 
-    $ gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+# Test single endpoint
+load_test.test_endpoint('https://api.example.com/users')
 
-## Usage
+# Test multiple endpoints
+load_test.test_endpoints([
+  {
+    path: 'https://api.example.com/users',
+    method: :get
+  },
+  {
+    path: 'https://api.example.com/posts',
+    method: :post,
+    params: { title: 'Test Post' }
+  }
+])
+```
 
-TODO: Write usage instructions here
+### 2. Memory Benchmarker
+```ruby
+# Simple memory analysis
+memory_test = ChacathuhuongBenchmarker::MemoryBenchmarker.new
 
-## Development
+memory_test.measure do
+  1000.times { User.new(name: 'Test User') }
+end
 
-After checking out the repo, run `bin/setup` to install dependencies. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+# Detailed memory analysis with garbage collection
+memory_test.measure(gc_stats: true) do
+  User.all.map(&:calculate_complex_stats)
+end
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+### 3. Query Benchmarker
+```ruby
+# Compare query performance
+query_test = ChacathuhuongBenchmarker::QueryBenchmarker.new
+
+query_test.compare([
+  {
+    label: "Simple Find",
+    query: -> { User.first }
+  },
+  {
+    label: "Complex Query",
+    query: -> { User.includes(:posts).where(active: true) }
+  }
+])
+```
+
+## Configuration
+
+```ruby
+# config/initializers/chacathuhuong_benchmarker.rb
+ChacathuhuongBenchmarker.configure do |config|
+  # Load testing configuration
+  config.load_test = {
+    concurrent_users: 10,
+    duration: 60,
+    timeout: 30
+  }
+
+  # Memory testing configuration
+  config.memory_test = {
+    gc_stats: true,
+    detailed_report: true
+  }
+
+  # Query testing configuration
+  config.query_test = {
+    iterations: 5,
+    warmup_runs: 2
+  }
+end
+```
+
+## Sample Outputs
+
+### Load Test Report
+```ruby
+{
+  endpoint: "https://api.example.com/users",
+  statistics: {
+    total_requests: 1000,
+    successful_requests: 985,
+    failed_requests: 15,
+    average_response_time: 0.234,
+    requests_per_second: 45.5
+  }
+}
+```
+
+### Memory Analysis Report
+```ruby
+{
+  initial_memory: 100_000,
+  final_memory: 150_000,
+  memory_increase: 50_000,
+  gc_stats: {
+    count: 3,
+    heap_allocated_pages: 125,
+    heap_sorted_length: 126
+  }
+}
+```
+
+### Query Performance Report
+```ruby
+{
+  comparisons: [
+    {
+      label: "Simple Find",
+      average_time: 0.001,
+      total_queries: 1
+    },
+    {
+      label: "Complex Query",
+      average_time: 0.015,
+      total_queries: 3
+    }
+  ]
+}
+```
+
+## Best Practices
+
+### Load Testing
+- Start with low concurrent users
+- Increase load gradually
+- Monitor system resources
+- Test various endpoints
+- Set appropriate timeouts
+
+### Memory Analysis
+- Clear garbage collection before tests
+- Monitor memory growth patterns
+- Check for memory leaks
+- Use representative data sizes
+
+### Query Testing
+- Test with realistic data volumes
+- Include warm-up runs
+- Compare similar queries
+- Test in isolation
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/chacathuhuong_benchmarker. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [code of conduct](https://github.com/[USERNAME]/chacathuhuong_benchmarker/blob/master/CODE_OF_CONDUCT.md).
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -am 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## Code of Conduct
+## License
 
-Everyone interacting in the ChacathuhuongBenchmarker project's codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/chacathuhuong_benchmarker/blob/master/CODE_OF_CONDUCT.md).
+Released under the [MIT License](https://opensource.org/licenses/MIT).
