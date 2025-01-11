@@ -1,0 +1,16 @@
+# Benchmark configuration file
+---
+default: &default
+  iterations: 5
+  warmup: true
+  output_path: log/benchmarks
+  reporter: console
+
+development:
+  <<: *default
+  detailed_logging: true
+
+production:
+  <<: *default
+  reporter: json
+  detailed_logging: false
