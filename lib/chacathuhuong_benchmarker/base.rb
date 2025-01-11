@@ -7,14 +7,17 @@ module ChacathuhuongBenchmarker
       @options = default_options.merge(options)
     end
 
-    def measure
+    def measure(iterations = @options[:iterations])
       warmup if ChacathuhuongBenchmarker.configuration.warmup
 
       results = Benchmark.bmbm do |x|
-        x.report(label) { yield if block_given? }
+        iterations.times do
+          x.report(label) { yield if block_given? }
+        end
       end
 
       report_results(results)
+      results
     end
 
     private
