@@ -33,7 +33,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "rspec", "~> 3.12"
-
-  # For more information and examples about making a new gem, check out our
-  # guide at: https://bundler.io/guides/creating_gem.html
+  spec.add_development_dependency "timecop", "~> 0.9.6"
+  spec.add_development_dependency "webmock", "~> 3.18"
+  spec.add_development_dependency "factory_bot", "~> 6.2"
 end
