@@ -1,0 +1,20 @@
+PATH
+  remote: .
+  specs:
+    chacathuhuong_benchmarker (0.1.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    rake (13.2.1)
+
+PLATFORMS
+  arm64-darwin-24
+  ruby
+
+DEPENDENCIES
+  chacathuhuong_benchmarker!
+  rake (~> 13.0)
+
+BUNDLED WITH
+   2.5.15
