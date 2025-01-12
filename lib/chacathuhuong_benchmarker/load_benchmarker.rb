@@ -43,6 +43,8 @@ module ChacathuhuongBenchmarker
               results[:errors] += 1
               logger.error("Request failed: #{e.message}")
             end
+          ensure # Always increment requests count, even if there's an error
+            synchronized { results[:requests] += 1 }
           end
         end
       end
@@ -50,7 +52,7 @@ module ChacathuhuongBenchmarker
       pool.shutdown
       pool.wait_for_termination
 
-      calculate_statistics(results)
+      calculate_statistics(results) # Ensure that the result is always returned
     end
 
     def measure_multiple_endpoints
@@ -83,16 +85,15 @@ module ChacathuhuongBenchmarker
         http.request(request)
       end
 
-      unless response.is_a?(Net::HTTPSuccess)
-        raise "Request failed with status: #{response.code}"
+      unless response.code.to_i >= 200 && response.code.to_i < 300
+        raise Net::HTTPError.new("Request failed with status: #{response.code}", response)
       end
 
       response
     end
 
     def calculate_statistics(results)
-      return if results[:response_times].empty?
-
+      # Handle the case when response_times is empty
       response_times = results[:response_times].sort
       total_time = Time.now - results[:start_time]
 
@@ -102,9 +103,9 @@ module ChacathuhuongBenchmarker
         errors: results[:errors],
         requests_per_second: (results[:requests] / total_time).round(2),
         response_time: {
-          min: response_times.first.round(3),
-          max: response_times.last.round(3),
-          avg: (response_times.sum / response_times.size).round(3),
+          min: response_times.empty? ? 0 : response_times.first.round(3),
+          max: response_times.empty? ? 0 : response_times.last.round(3),
+          avg: response_times.empty? ? 0 : (response_times.sum / response_times.size).round(3),
           median: calculate_median(response_times),
           p95: percentile(response_times, 95),
           p99: percentile(response_times, 99)
@@ -113,6 +114,8 @@ module ChacathuhuongBenchmarker
     end
 
     def calculate_median(sorted_array)
+      return 0 if sorted_array.empty? # Return 0 if the array is empty
+
       mid = sorted_array.length / 2
       if sorted_array.length.even?
         ((sorted_array[mid-1] + sorted_array[mid]) / 2.0).round(3)
@@ -143,7 +146,7 @@ module ChacathuhuongBenchmarker
           total_endpoints: endpoints.size,
           timestamp: Time.now
         },
-        results: @results
+        results: @results # Use @results instance variable
       }
     end
 
