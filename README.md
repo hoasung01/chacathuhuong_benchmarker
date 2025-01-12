@@ -5,6 +5,9 @@ A focused benchmarking toolkit for Ruby on Rails applications that provides insi
 - Memory Usage Analysis
 - Query Performance Optimization
 
+## Warning: Under Development
+This project is still under active development and is not yet stable for production use. APIs and configurations may change frequently. Use at your own risk.
+
 ## Installation
 
 ```ruby
