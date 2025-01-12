@@ -9,7 +9,7 @@ A focused benchmarking toolkit for Ruby on Rails applications that provides insi
 
 ```ruby
 # Add to your Gemfile
-gem 'chacathuhuong_benchmarker'
+gem 'chacathuhuong_benchmarker', github: 'hoasung01/chacathuhuong_benchmarker'
 ```
 
 ```bash
