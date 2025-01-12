@@ -32,6 +32,7 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.add_development_dependency "rails", "~> 7.0"
   spec.add_development_dependency "rspec", "~> 3.12"
   spec.add_development_dependency "timecop", "~> 0.9.6"
   spec.add_development_dependency "webmock", "~> 3.18"
