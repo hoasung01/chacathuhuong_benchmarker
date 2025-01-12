@@ -5,8 +5,8 @@ require_relative "lib/chacathuhuong_benchmarker/version"
 Gem::Specification.new do |spec|
   spec.name = "chacathuhuong_benchmarker"
   spec.version = ChacathuhuongBenchmarker::VERSION
-  spec.authors = ["hainguyen-eh"]
-  spec.email = ["hai.nguyen@employmenthero.com"]
+  spec.authors = ["hoasung01"]
+  spec.email = ["nguyenngochai.shipagent@gmail.com"]
 
   spec.summary = "A simple and flexible benchmarking library for Ruby"
   spec.description = "ChacathuhuongBenchmarker provides a convenient way to benchmark your Ruby code and track performance over time."
