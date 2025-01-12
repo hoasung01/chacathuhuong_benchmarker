@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors = ["hainguyen-eh"]
   spec.email = ["hai.nguyen@employmenthero.com"]
 
-  spec.summary = "TODO: Write a short summary, because RubyGems requires one."
-  spec.description = "TODO: Write a longer description or delete this line."
+  spec.summary = "A simple and flexible benchmarking library for Ruby"
+  spec.description = "ChacathuhuongBenchmarker provides a convenient way to benchmark your Ruby code and track performance over time."
   spec.homepage = "TODO: Put your gem's website or public repo URL here."
   spec.required_ruby_version = ">= 3.0.0"
 
