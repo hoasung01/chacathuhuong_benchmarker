@@ -8,10 +8,13 @@ require 'chacathuhuong_benchmarker/reporters/json_reporter'
 
 module ChacathuhuongBenchmarker
   class << self
-    attr_accessor :configuration
+    attr_writer :configuration
+
+    def configuration
+      @configuration ||= Configuration.new
+    end
 
     def configure
-      self.configuration ||= Configuration.new
       yield(configuration) if block_given?
     end
 
