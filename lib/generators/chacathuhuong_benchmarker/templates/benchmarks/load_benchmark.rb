@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ChacathuhuongBenchmarker::LoadBenchmarker.new(
   concurrent_users: 20,
   duration: 300,

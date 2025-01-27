@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ChacathuhuongBenchmarker::MemoryBenchmarker.new(
   label: "Memory Usage",
   options: { gc_stats: true }
