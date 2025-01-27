@@ -2,6 +2,9 @@ require 'benchmark'
 require 'chacathuhuong_benchmarker/version'
 require 'chacathuhuong_benchmarker/configuration'
 require 'chacathuhuong_benchmarker/base'
+require 'chacathuhuong_benchmarker/reporters/base_reporter'
+require 'chacathuhuong_benchmarker/reporters/console_reporter'
+require 'chacathuhuong_benchmarker/reporters/json_reporter'
 
 module ChacathuhuongBenchmarker
   class << self
