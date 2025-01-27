@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 ChacathuhuongBenchmarker.configure do |config|
   config.iterations = 5
   config.warmup = true
