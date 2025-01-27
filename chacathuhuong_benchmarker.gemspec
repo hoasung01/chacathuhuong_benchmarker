@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
 
   spec.summary = "A simple and flexible benchmarking library for Ruby"
   spec.description = "ChacathuhuongBenchmarker provides a convenient way to benchmark your Ruby code and track performance over time."
-  spec.homepage = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage = "https://github.com/hoasung01/chacathuhuong_benchmarker"
   spec.required_ruby_version = ">= 3.0.0"
 
   spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
