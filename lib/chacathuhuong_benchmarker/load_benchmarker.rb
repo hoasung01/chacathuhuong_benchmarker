@@ -1,6 +1,5 @@
 require 'net/http'
 require 'concurrent'
-require 'benchmark'
 
 module ChacathuhuongBenchmarker
   class LoadBenchmarker < Base
