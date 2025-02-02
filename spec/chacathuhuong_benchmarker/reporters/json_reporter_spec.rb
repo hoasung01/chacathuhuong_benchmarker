@@ -4,9 +4,11 @@ RSpec.describe ChacathuhuongBenchmarker::Reporters::JsonReporter do
   describe '#report' do
     let(:results) { [{ label: 'Test', real: 0.1 }] }
     let(:output_path) { 'tmp/benchmark_results' }
-    let(:file_path) { "#{output_path}/#{Time.now.to_i}.json" }
+    let(:timestamp) { Time.now.to_i }
+    let(:file_path) { "#{output_path}/benchmark_#{timestamp}.json" }
 
     before do
+      allow(Time).to receive(:now).and_return(double(to_i: timestamp))
       allow(ChacathuhuongBenchmarker).to receive(:configuration).and_return(double(output_path: output_path))
       FileUtils.mkdir_p(output_path)
     end
@@ -15,16 +17,23 @@ RSpec.describe ChacathuhuongBenchmarker::Reporters::JsonReporter do
       FileUtils.rm_rf(output_path)
     end
 
-    it 'writes the benchmark results to a JSON file' do
-      reporter = described_class.new
-      reporter.report(results)
+    context 'with valid results' do
+      it 'writes the benchmark results to a JSON file' do
+        reporter = described_class.new
+        reporter.report(results)
 
-      expect(File.exist?(file_path)).to be true
+        expect(File.exist?(file_path)).to be true
+        expect(JSON.parse(File.read(file_path))).to eq([{ "label" => "Test", "real" => 0.1 }])
+      end
+    end
 
-      file_content = File.read(file_path)
-      parsed_results = JSON.parse(file_content)
+    context 'with empty results' do
+      it 'does not create a file' do
+        reporter = described_class.new
+        reporter.report([])
 
-      expect(parsed_results).to eq([{ "label" => "Test", "real" => 0.1 }])
+        expect(File.exist?(file_path)).to be false
+      end
     end
   end
 end
