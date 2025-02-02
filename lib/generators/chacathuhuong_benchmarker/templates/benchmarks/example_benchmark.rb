@@ -3,9 +3,9 @@
 require 'chacathuhuong_benchmarker'
 
 ChacathuhuongBenchmarker.run("Example Benchmark") do
-   # Example of CPU-intensive operation
-   array = (1..10_000).to_a
-   array.shuffle.sort
+  # Example of CPU-intensive operation
+  array = (1..10_000).to_a
+  array.shuffle.sort
 end
 
 # Custom configuration for this benchmark

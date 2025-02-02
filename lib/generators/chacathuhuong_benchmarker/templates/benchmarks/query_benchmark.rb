@@ -19,7 +19,7 @@ begin
 
   puts "Query Benchmark Results:"
   puts results.inspect
-rescue => e
+rescue StandardError => e
   puts "Error during query benchmark: #{e.message}"
   puts e.backtrace
 end

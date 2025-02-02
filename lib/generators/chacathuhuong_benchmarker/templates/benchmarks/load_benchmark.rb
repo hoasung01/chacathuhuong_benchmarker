@@ -12,7 +12,7 @@ load_test = ChacathuhuongBenchmarker::LoadBenchmarker.new(
       method: :get
     },
     {
-      path: 'http://localhost:3000/api/status',  # Status endpoint
+      path: 'http://localhost:3000/api/status', # Status endpoint
       method: :get
     }
   ]
@@ -22,7 +22,7 @@ begin
   results = load_test.measure_multiple_endpoints
   puts "Load test completed successfully"
   puts "Results: #{results.inspect}"
-rescue => e
+rescue StandardError => e
   puts "Error during load test: #{e.message}"
   puts e.backtrace
 end
