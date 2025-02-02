@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     chacathuhuong_benchmarker (0.1.0)
+      get_process_mem (~> 0.2.1)
 
 GEM
   remote: https://rubygems.org/
@@ -222,7 +223,6 @@ PLATFORMS
 DEPENDENCIES
   chacathuhuong_benchmarker!
   factory_bot (~> 6.2)
-  get_process_mem (~> 0.2.1)
   rails (~> 7.0)
   rake (~> 13.0)
   rspec (~> 3.12)
