@@ -2,34 +2,66 @@ require 'spec_helper'
 require 'chacathuhuong_benchmarker/memory_benchmarker'
 require 'get_process_mem'
 
-describe ChacathuhuongBenchmarker::MemoryBenchmarker do
-  let(:config) { {} }
-  let(:benchmarker) { described_class.new(config) }
+RSpec.describe ChacathuhuongBenchmarker::MemoryBenchmarker do
+  let(:label) { "Memory Test" }
+  let(:options) { { gc_stats: true } }
+  let(:benchmarker) { described_class.new(label, options) }
+
+  describe '#initialize' do
+    it 'sets the label and options' do
+      expect(benchmarker.label).to eq(label)
+      expect(benchmarker.options).to include(gc_stats: true)
+    end
+  end
 
   describe '#measure' do
+    let(:mem_double) { instance_double(GetProcessMem) }
+
+    before do
+      allow(GetProcessMem).to receive(:new).and_return(mem_double)
+    end
+
     context 'when no block is given' do
-      it 'returns a result of nil' do
-        expect(benchmarker.measure[:result]).to be_nil
+      before do
+        allow(mem_double).to receive(:mb).and_return(100, 100)
+      end
+
+      it 'returns hash with nil result and zero memory usage' do
+        result = benchmarker.measure
+        expect(result).to eq({
+          memory_used: 0.0,
+          result: nil
+        })
       end
     end
 
     context 'when a block is given' do
-      let(:block_result) { 'Result from block' }
+      let(:block_result) { 'Test Result' }
 
-      it 'returns the result from the block' do
-        expect(benchmarker.measure { block_result }[:result]).to eq(block_result)
+      before do
+        allow(mem_double).to receive(:mb).and_return(100, 150)
+      end
+
+      it 'returns the block result and memory usage' do
+        result = benchmarker.measure { block_result }
+        expect(result).to eq({
+          memory_used: 50.0,
+          result: block_result
+        })
       end
     end
 
-    context 'when measuring memory usage' do
-      let(:memory_before) { 100 }
-      let(:memory_after) { 150 }
+    context 'when GetProcessMem returns nil' do
+      before do
+        allow(mem_double).to receive(:mb).and_return(nil, nil)
+      end
 
-      it 'returns the correct memory usage' do
-        mem = instance_double(GetProcessMem)
-        allow(GetProcessMem).to receive(:new).and_return(mem)
-        allow(mem).to receive(:mb).and_return(memory_before, memory_after)
-        expect(benchmarker.measure[:memory_used]).to eq(50.0)
+      it 'handles nil memory values' do
+        result = benchmarker.measure { 'test' }
+        expect(result).to eq({
+          memory_used: 0.0,
+          result: 'test'
+        })
       end
     end
   end
