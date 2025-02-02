@@ -8,6 +8,7 @@ RSpec.describe ChacathuhuongBenchmarker::Reporters::ConsoleReporter do
 
       expect($stdout).to receive(:puts).with("\n=== Benchmark Results ===")
       expect($stdout).to receive(:puts).with(results)
+      expect($stdout).to receive(:puts).with("=== End of Results ===\n")
 
       reporter.report(results)
     end
