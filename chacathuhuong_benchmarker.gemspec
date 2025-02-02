@@ -37,5 +37,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "timecop", "~> 0.9.6"
   spec.add_development_dependency "webmock", "~> 3.18"
   spec.add_development_dependency "factory_bot", "~> 6.2"
-  spec.add_development_dependency "get_process_mem", "~> 0.2.1"
+  spec.add_dependency "get_process_mem", "~> 0.2.1"
 end

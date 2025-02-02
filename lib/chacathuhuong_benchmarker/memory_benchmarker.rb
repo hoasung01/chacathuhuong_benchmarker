@@ -1,10 +1,12 @@
+require 'get_process_mem'
+
 module ChacathuhuongBenchmarker
   class MemoryBenchmarker < Base
-    def initialize(config)
-      @config = config
+    def initialize(label, options = {})
+      super(label, options)
     end
 
-    def measure
+    def measure(&block)
       mem = GetProcessMem.new
       memory_before = mem.mb || 0
       result = block_given? ? yield : nil
