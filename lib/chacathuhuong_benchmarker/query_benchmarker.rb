@@ -1,3 +1,5 @@
+require 'benchmark'
+
 module ChacathuhuongBenchmarker
   class QueryBenchmarker < Base
     def measure_queries(*queries)
@@ -8,6 +10,15 @@ module ChacathuhuongBenchmarker
       end
 
       report_results(results)
+    end
+
+    private
+
+    def report_results(results)
+      {
+        timestamp: Time.now,
+        queries: results.map { |r| { label: r.label, real: r.real, utime: r.utime, stime: r.stime } }
+      }
     end
   end
 end
