@@ -2,8 +2,9 @@ require 'spec_helper'
 require 'chacathuhuong_benchmarker/query_benchmarker'
 
 RSpec.describe ChacathuhuongBenchmarker::QueryBenchmarker do
-  let(:config) { instance_double(ChacathuhuongBenchmarker::Configuration) }
-  let(:benchmarker) { described_class.new(config) }
+  let(:label) { "Database Queries" }
+  let(:options) { {} }
+  let(:benchmarker) { described_class.new(label, options) }
 
   describe '#measure_queries' do
     let(:query1) { { label: 'Query 1', block: -> { sleep(0.1) } } }
