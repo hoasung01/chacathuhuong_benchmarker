@@ -5,12 +5,14 @@ RSpec.describe ChacathuhuongBenchmarker::Base do
   let(:options) { { iterations: 5 } }
   let(:configuration) { instance_double('ChacathuhuongBenchmarker::Configuration') }
   let(:benchmarker) { described_class.new(label, options) }
+  let(:reporter) { double('reporter') }
 
   before do
     allow(ChacathuhuongBenchmarker).to receive(:configuration).and_return(configuration)
     allow(configuration).to receive(:iterations).and_return(10)
     allow(configuration).to receive(:warmup).and_return(false)
-    allow(configuration).to receive(:reporter).and_return(double('reporter').as_null_object)
+    allow(configuration).to receive(:reporter).and_return(reporter)
+    allow(reporter).to receive(:report)
   end
 
   describe '#initialize' do
@@ -42,12 +44,18 @@ RSpec.describe ChacathuhuongBenchmarker::Base do
       expect(benchmarker.measure { 'test' }).to eq('results')
     end
 
+    it 'returns nil when no block is given' do
+      expect(benchmarker.measure).to be_nil
+    end
+
     context 'when warmup is enabled' do
       before do
         allow(configuration).to receive(:warmup).and_return(true)
+        allow(GC).to receive(:start)
       end
 
-      it 'calls the warmup method' do
+      it 'calls the warmup method and GC.start' do
+        expect(GC).to receive(:start)
         expect(benchmarker).to receive(:warmup)
         benchmarker.measure { 'test' }
       end
@@ -61,6 +69,16 @@ RSpec.describe ChacathuhuongBenchmarker::Base do
           block.call(x)
         end
         benchmarker.measure(3) { 'test' }
+      end
+    end
+
+    context 'when reporter is nil' do
+      before do
+        allow(configuration).to receive(:reporter).and_return(nil)
+      end
+
+      it 'does not raise error' do
+        expect { benchmarker.measure { 'test' } }.not_to raise_error
       end
     end
   end

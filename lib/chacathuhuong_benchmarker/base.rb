@@ -8,11 +8,13 @@ module ChacathuhuongBenchmarker
     end
 
     def measure(iterations = @options[:iterations])
-      warmup if ChacathuhuongBenchmarker.configuration.warmup
+      return unless block_given?
+
+      warmup { yield } if ChacathuhuongBenchmarker.configuration.warmup
 
       results = Benchmark.bmbm do |x|
         iterations.times do
-          x.report(label) { yield if block_given? }
+          x.report(label) { yield }
         end
       end
 
@@ -23,16 +25,17 @@ module ChacathuhuongBenchmarker
     private
 
     def warmup
+      GC.start # Clear garbage before warmup
       yield if block_given?
     end
 
     def report_results(results)
-      ChacathuhuongBenchmarker.configuration.reporter.report(results)
+      ChacathuhuongBenchmarker.configuration.reporter&.report(results)
     end
 
     def default_options
       {
-        iterations: ChacathuhuongBenchmarker.configuration.iterations
+        iterations: ChacathuhuongBenchmarker.configuration&.iterations || 1
       }
     end
   end
