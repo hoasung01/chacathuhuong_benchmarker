@@ -9,7 +9,7 @@ A focused benchmarking toolkit for Ruby on Rails applications that provides insi
 
 Add this line to your application's Gemfile:
 ```ruby
-gem 'chacathuhuong_benchmarker', '~> 0.1.1'
+gem 'chacathuhuong_benchmarker', github: 'hoasung01/chacathuhuong_benchmarker', branch: 'main'
 ```
 
 Then execute:
