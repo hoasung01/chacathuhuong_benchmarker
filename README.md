@@ -5,20 +5,54 @@ A focused benchmarking toolkit for Ruby on Rails applications that provides insi
 - Memory Usage Analysis
 - Query Performance Optimization
 
-## Warning: Under Development
-This project is still under active development and is not yet stable for production use. APIs and configurations may change frequently. Use at your own risk.
-
 ## Installation
 
+Add this line to your application's Gemfile:
 ```ruby
-# Add to your Gemfile
-gem 'chacathuhuong_benchmarker', github: 'hoasung01/chacathuhuong_benchmarker'
+gem 'chacathuhuong_benchmarker', '~> 0.1.1'
 ```
 
+Then execute:
 ```bash
 # Install via terminal
 bundle install
 rails generate chacathuhuong_benchmarker:install
+```
+
+The generator will create:
+- An initializer at `config/initializers/chacathuhuong_benchmarker.rb`
+- Example benchmark files in the `benchmarks` directory
+
+## Usage
+
+### File-based Usage
+Run the generated benchmark files:
+```bash
+ruby benchmarks/example_benchmark.rb
+ruby benchmarks/load_benchmark.rb
+ruby benchmarks/memory_benchmark.rb
+ruby benchmarks/query_benchmark.rb
+```
+
+### Console Usage
+Run tests directly in your Rails console:
+```ruby
+# Start console
+rails console
+
+# Run load test
+load_test = ChacathuhuongBenchmarker::LoadBenchmarker.new
+load_test.test_endpoint('https://api.example.com/users')
+
+# Run memory test
+memory_test = ChacathuhuongBenchmarker::MemoryBenchmarker.new
+memory_test.measure { YourModel.all.to_a }
+
+# Run query test
+query_test = ChacathuhuongBenchmarker::QueryBenchmarker.new
+query_test.compare([
+  { label: "Simple Query", query: -> { YourModel.first } }
+])
 ```
 
 ## Core Features
@@ -53,13 +87,15 @@ load_test.test_endpoints([
 # Simple memory analysis
 memory_test = ChacathuhuongBenchmarker::MemoryBenchmarker.new
 
+# Example using a model (replace YourModel with your actual model)
 memory_test.measure do
-  1000.times { User.new(name: 'Test User') }
+  1000.times { YourModel.new(attribute: 'Test Value') }
 end
 
 # Detailed memory analysis with garbage collection
+# Example using complex calculations (replace YourModel with your actual model)
 memory_test.measure(gc_stats: true) do
-  User.all.map(&:calculate_complex_stats)
+  YourModel.all.map(&:your_calculation_method)
 end
 ```
 
@@ -68,14 +104,15 @@ end
 # Compare query performance
 query_test = ChacathuhuongBenchmarker::QueryBenchmarker.new
 
+# Examples using models (replace YourModel with your actual model)
 query_test.compare([
   {
     label: "Simple Find",
-    query: -> { User.first }
+    query: -> { YourModel.first }
   },
   {
     label: "Complex Query",
-    query: -> { User.includes(:posts).where(active: true) }
+    query: -> { YourModel.includes(:associated_records).where(status: true) }
   }
 ])
 ```
@@ -186,3 +223,4 @@ end
 ## License
 
 Released under the [MIT License](https://opensource.org/licenses/MIT).
+```
